@@ -11,10 +11,20 @@ run 'g++ project1_Lee_jtl0071.cpp -o project1_Lee_jtl0071'
 using namespace std;
 
 int main(){
-    // Take Loan Amount
+    // Create input variables
     int loanAmt;
+    int interestRate;
+    int monthlyPayments;
+
+    // Input
     cout << "Loan Amount: ";
     cin >> loanAmt;
+
+    cout << "Interest Rate (% per year): ";
+    cin >> interestRate;
+
+    cout << "Monthly Payments :";
+    cin >> monthlyPayments; 
 
 
     return 0;
