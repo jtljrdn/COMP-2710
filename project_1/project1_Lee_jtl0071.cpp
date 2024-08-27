@@ -3,13 +3,14 @@ Jordan Lee
 jtl0071
 project1_Lee_jtl0071.cpp
 
-Compile Instructions:
-run 'g++ project1_Lee_jtl0071.cpp -o project1_Lee_jtl0071'
+Compile and Run Instructions:
+compile 'g++ project1_Lee_jtl0071.cpp -o project1_Lee_jtl0071.out'
+execute: './project1_Lee_jtl0071.out'
 */
 
 #include <iostream>
 #include <iomanip>
-#include <sstream>
+
 using namespace std;
 
 int main()
