@@ -44,8 +44,9 @@ int main()
     {
         throw invalid_argument("Input must be a integer");
     }
-
+    // Calculate initial interest amount
     interestAmt = loanAmt * ((interestRate / 12) / 100);
+    // Make sure monthly payment is greater than interest
     if (monthlyPayment < interestAmt)
     {
         cout << "ERROR: Interest is more than your payment. Please enter a monthly payment higher than " << interestAmt << ": ";
