@@ -11,51 +11,22 @@ execute: './project1_Lee_jtl0071.out'
 #include <iomanip>
 using namespace std;
 
-int main()
-{
-    // Create util variables
+/**
+* Handles the output of the table
+*
+* @param loanAmt Loan Amount
+* @param interestRate Yearly Interest Rate of Loan
+* @param monthlyPayment Monthly Payment of Loan
+* @returns 0
+*/
+int printOutput(float loanAmt, float interestRate, float monthlyPayment){
+
+    // Util Variables
     float principal;
     int monthsCount = 0;
-    float interestAmt;
     float totalInterest = 0;
+    float interestAmt = loanAmt * ((interestRate / 12) / 100);
 
-    // Create input variables
-    float loanAmt;
-    float interestRate;
-    float monthlyPayment;
-
-    // Take User Input, handle errors with input
-    cout << "Loan Amount: ";
-    cin >> loanAmt;
-    if (!cin)
-    {
-        throw invalid_argument("Input must be a float"); // Input error handling from Painless Programming on Youtube
-    }
-    cout << "Interest Rate (% per year): ";
-    cin >> interestRate;
-    if (!cin)
-    {
-        throw invalid_argument("Input must be a float");
-    }
-    cout << "Monthly Payments: ";
-    cin >> monthlyPayment;
-    cout << endl;
-    if (!cin)
-    {
-        throw invalid_argument("Input must be a integer");
-    }
-    // Calculate initial interest amount
-    interestAmt = loanAmt * ((interestRate / 12) / 100);
-    // Make sure monthly payment is greater than interest
-    if (monthlyPayment < interestAmt)
-    {
-        cout << "ERROR: Interest is more than your payment. Please enter a monthly payment higher than " << interestAmt << ": ";
-        cin >> monthlyPayment;
-        if (!cin)
-        {
-            throw invalid_argument("Input must be a float");
-        }
-    }
 
     // Output Header
     cout << "**********************************************************" << endl;
@@ -107,5 +78,81 @@ int main()
     cout << "It takes " << to_string(monthsCount) << " months to pay off the loan" << endl;
     cout << "Total interest paid is: $" << totalInterest << endl;
 
+
     return 0;
 }
+
+
+// Main program execution
+int main()
+{
+    // Create util variables
+    float interestAmt;
+
+    // Create input variables
+    float loanAmt;
+    float interestRate;
+    float monthlyPayment;
+
+    // Take User Input, handle errors with input
+    cout << "Loan Amount: ";
+    cin >> loanAmt;
+    if (!cin)
+    {
+        throw invalid_argument("Input must be a float"); // Input error handling from Painless Programming on Youtube
+    }
+    cout << "Interest Rate (% per year): ";
+    cin >> interestRate;
+    if (!cin)
+    {
+        throw invalid_argument("Input must be a float");
+    }
+    cout << "Monthly Payments: ";
+    cin >> monthlyPayment;
+    cout << endl;
+    if (!cin)
+    {
+        throw invalid_argument("Input must be a float");
+    }
+    // Calculate initial interest amount
+    interestAmt = loanAmt * ((interestRate / 12) / 100);
+
+      /*-----------------------------------*/
+     //     Handle Edge Cases/Errors      //
+    /*-----------------------------------*/
+
+    // If interest is more than monthly payment
+    if (monthlyPayment < interestAmt)
+    {
+        cout << "ERROR: Interest is more than your payment. Please enter a monthly payment higher than " << interestAmt << ": ";
+        cin >> monthlyPayment;
+        if (!cin)
+        {
+            throw invalid_argument("Input must be a float");
+        }
+    }
+
+    // If monthly payment is not a positive number
+    if ((monthlyPayment <= 0)){
+        cout << "ERROR: Monthly payment must be a number greater than 0: ";
+        cin >> monthlyPayment;
+        if (!cin){
+            throw invalid_argument("Input must be float");
+        }
+    }
+
+    // If loan amount is not a positive number
+    if ((loanAmt <= 0)){
+        cout << "ERROR: Loan amount must be a number greater than 0: ";
+        cin >> loanAmt;
+        if (!cin){
+            throw invalid_argument("Input must be float");
+        }
+    }
+
+    printOutput(loanAmt, interestRate, monthlyPayment);
+
+
+    return 0;
+}
+
