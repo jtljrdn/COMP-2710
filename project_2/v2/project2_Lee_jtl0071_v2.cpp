@@ -49,6 +49,7 @@ void Aaron_shoots2(bool& B_alive, bool& C_alive){}
 * Change C_alive into false if Charlie is killed.
 */
 
-void main(){
+int main(){
 
+    return 0;
 }
