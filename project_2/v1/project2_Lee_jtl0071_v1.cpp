@@ -285,6 +285,7 @@ int main()
         }
     }
 
+    // Calculate Win Percentages
     A_win_precent = (A_count / 10000.0) * 100;
     B_win_precent = (B_count / 10000.0) * 100;
     C_win_precent = (C_count / 10000.0) * 100;
