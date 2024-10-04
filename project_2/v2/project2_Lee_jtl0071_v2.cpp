@@ -343,9 +343,9 @@ int Strategy_2(bool &Aaron, bool &Bob, bool &Charlie)
     }
 }
 
-/////////////////
+////////////////
 // TEST CASES //
-///////////////
+////////////////
 
 void test_at_least_two_alive(void)
 {
@@ -383,7 +383,7 @@ void test_Aaron_shoots1(bool &B_alive, bool &C_alive)
     B_alive = true;
     C_alive = true;
     
-    cout << "Unit Testing 2: Function Aaron_shoots1(Bob_alive, Charlie_alive)" << endl;
+    cout << "Unit Testing 2: Function Aaron_shoots1(B_alive, C_alive)" << endl;
     cout << "Case 1: Bob is alive, Charlie is alive" << endl;
     Aaron_shoots1(B_alive, C_alive);
     assert(B_alive || C_alive);
@@ -405,6 +405,14 @@ void test_Aaron_shoots1(bool &B_alive, bool &C_alive)
 
     cout << "Press any key to continue...";
     cin.ignore().get();
+}
+
+void test_Bob_shoots(bool &A_alive, bool &C_alive)
+{
+    A_alive = true;
+    C_alive = true;
+
+    cout << "Unit Testing 3: Function Bob_shoots(A_alive, C_alive)" << endl;
 }
 
 int main()
