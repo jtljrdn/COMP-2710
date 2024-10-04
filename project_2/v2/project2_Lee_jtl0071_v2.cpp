@@ -215,65 +215,37 @@ void Aaron_shoots2(bool &B_alive, bool &C_alive)
  */
 int Strategy_1(bool &Aaron, bool &Bob, bool &Charlie)
 {
-    // Aaron Shoots Charlie First, Charlie has a 1/3 chance of dying
-    Aaron_shoots1(Bob, Charlie);
 
-    // Bob shoots at Charlie if Charlie is alive, otherwise he shoots at Aaron
-    if (Bob)
-    {
-        Bob_shoots(Aaron, Charlie);
-    }
-
-    // If Charlie is alive by now, Charlie shoots back at Bob, killing Bob
-    if (!at_least_two_alive(Aaron, Bob, Charlie))
+    while (at_least_two_alive(Aaron, Bob, Charlie))
     {
         if (Aaron)
         {
-            return 1;
+            Aaron_shoots1(Bob, Charlie); // Aaron at Charlie shoots but intentionally misses
         }
-        else if (Bob)
+        if (Bob)
         {
-            return 2;
+            Bob_shoots(Aaron, Charlie); // Bob shoots at Charlie. 1/2 chance of hitting
+        }
+        if (Charlie)
+        {
+            Charlie_shoots(Aaron, Bob); // If Charlie is alive, he shoots at Bob and kills bob
         }
     }
-
-    if (Charlie)
-    {
-        Charlie_shoots(Aaron, Bob);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 3;
-        }
-    }
-
-    // If Aaron, then shoots at Charlie or Bob, with a 1/3 chance of hitting.
-    // If Bob, then shoots at Aaron or Charlie
-
     if (Aaron)
     {
-        Aaron_shoots1(Bob, Charlie);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 1;
-        }
+        return 1;
     }
-
-    if (Bob)
+    else if (Bob)
     {
-        Bob_shoots(Aaron, Charlie);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 2;
-        }
+        return 2;
     }
-
-    if (Charlie)
+    else if (Charlie)
     {
-        Charlie_shoots(Aaron, Bob);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 3;
-        }
+        return 3;
+    }
+    else
+    {
+        return 0;
     }
 }
 
@@ -288,65 +260,37 @@ int Strategy_1(bool &Aaron, bool &Bob, bool &Charlie)
 int Strategy_2(bool &Aaron, bool &Bob, bool &Charlie)
 {
 
-    Aaron_shoots2(Bob,Charlie);
-    // Bob shoots at Charlie if Charlie is alive, otherwise he shoots at Aaron
-    if (Bob)
-    {
-        Bob_shoots(Aaron, Charlie);
-    }
-
-    // If Charlie is alive by now, Charlie shoots back at Bob, killing Bob
-    if (!at_least_two_alive(Aaron, Bob, Charlie))
+    while (at_least_two_alive(Aaron, Bob, Charlie))
     {
         if (Aaron)
         {
-            return 1;
+            Aaron_shoots2(Bob, Charlie); // Aaron at Charlie shoots but intentionally misses
         }
-        else if (Bob)
+        if (Bob)
         {
-            return 2;
+            Bob_shoots(Aaron, Charlie); // Bob shoots at Charlie. 1/2 chance of hitting
+        }
+        if (Charlie)
+        {
+            Charlie_shoots(Aaron, Bob); // If Charlie is alive, he shoots at Bob and kills bob
         }
     }
-
-    if (Charlie)
-    {
-        Charlie_shoots(Aaron, Bob);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 3;
-        }
-    }
-
-    // If Aaron, then shoots at Charlie or Bob, with a 1/3 chance of hitting.
-    // If Bob, then shoots at Aaron or Charlie
-
     if (Aaron)
     {
-        Aaron_shoots2(Bob, Charlie);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 1;
-        }
+        return 1;
     }
-
-    if (Bob)
+    else if (Bob)
     {
-        Bob_shoots(Aaron, Charlie);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 2;
-        }
+        return 2;
     }
-
-    if (Charlie)
+    else if (Charlie)
     {
-        Charlie_shoots(Aaron, Bob);
-        if (!at_least_two_alive(Aaron, Bob, Charlie))
-        {
-            return 3;
-        }
+        return 3;
     }
-
+    else
+    {
+        return 0;
+    }
 }
 
 ////////////////
@@ -480,7 +424,7 @@ void test_Charlie_shoots(bool &A_alive, bool &B_alive)
     B_alive = true;
 
     cout << "Press any key to continue...";
-    cin.ignore().get();    
+    cin.ignore().get();
 }
 
 void test_Aaron_shoots2(bool &B_alive, bool &C_alive)
