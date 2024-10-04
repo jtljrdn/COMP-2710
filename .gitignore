@@ -1,6 +1,6 @@
 .vscode/  
 .out
-project1/build/
-project2/v1/build
-project2/v2/build
+project_1/build/
+project_2/v1/build
+project_2/v2/build
 .tar.gz
