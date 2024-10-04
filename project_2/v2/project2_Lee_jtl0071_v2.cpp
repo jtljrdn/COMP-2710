@@ -531,7 +531,7 @@ int main()
     double B_win_precent;
     double C_win_precent;
     const int ITERATION_COUNT = 10000;
-    srand(time(0));
+    srand(static_cast<unsigned int>(time(0))); // Had to use copilot to get rid of this 'implicit conversion loses integer precision' warning
 
     cout << "*** Welcome to Jordan's Truel of the Fates Simulator ***" << endl;
 
@@ -544,7 +544,7 @@ int main()
     // Strategy 1
     cout << "Ready to test strategy 1 (run " << ITERATION_COUNT << " times):" << endl;
     cout << "Press any key to continue...";
-    cin.ignore().get();
+    cin.ignore().get(); // Derived from example in project2.pdf
     cout << "Testing Strategy 1..." << endl;
 
     for (int i = 0; i < ITERATION_COUNT; i++)
