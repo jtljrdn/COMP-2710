@@ -7,6 +7,16 @@ Compile and Run Instructions:
 compile 'g++ project2_Lee_jtl0071_v1.cpp -o project2_Lee_jtl0071_v1.out'
 execute: './project2_Lee_jtl0071_v1.out'
 */
+
+/* STRATEGY 2 ANALYSIS
+Due to my simulations, strategy 2 is better for Aaron. This is because by Aaron intentionally missing his first shot
+at Charlie, there is a 100% chance that now Bob has to shoot at Charlie instead of Aaron. Bob will either hit Charlie
+and it will be Aaron's turn again, or he will miss Charlie and Charlie will kill Bob. Either way, it will be Aaron's turn
+with one of the other two being dead. If left with just Aaron and Bob, they will go back and forth until one wins.
+If left with Aaron and Charlie, Aaron will shoot first and either hit him and win, or miss and get shot by Charlie.
+
+I believe this is better for both Aaron's and Charlie's win % and really only hurts Bob.
+*/
 #include <iostream>
 #include <stdlib.h>
 #include <assert.h>
@@ -19,7 +29,7 @@ using namespace std;
  * @param chance % chance of shooter hitting shot
  * @return true being hit and false being miss.
  */
-bool randomNumberGenerator(int chance)
+bool randomNumberGenerator(int chance) // Derived from example in project2.pdf
 {
 
     int shoot_target_result = rand() % 100;
@@ -360,7 +370,7 @@ int main()
     // Strategy 1
     cout << "Ready to test strategy 1 (run " << ITERATION_COUNT << " times):" << endl;
     cout << "Press any key to continue...";
-    cin.ignore().get();
+    cin.ignore().get(); // Derived from example in project2.pdf
     cout << "Testing Strategy 1..." << endl;
 
     for (int i = 0; i < ITERATION_COUNT; i++)
