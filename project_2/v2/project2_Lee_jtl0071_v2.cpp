@@ -293,6 +293,174 @@ int Strategy_2(bool &Aaron, bool &Bob, bool &Charlie)
     }
 }
 
+////////////////
+// TEST CASES //
+////////////////
+
+void test_at_least_two_alive(void)
+{
+    cout << "Unit Testing 1: Function - at_least_two_alive()\n";
+    cout << "   Case 1: Aaron alive, Bob alive, Charlie alive\n";
+    assert(true == at_least_two_alive(true, true, true));
+    cout << "           Case passed ...\n";
+    cout << "   Case 2: Aaron dead, Bob alive, Charlie alive\n";
+    assert(true == at_least_two_alive(false, true, true));
+    cout << "           Case passed ...\n";
+    cout << "   Case 3: Aaron alive, Bob dead, Charlie alive\n";
+    assert(true == at_least_two_alive(true, false, true));
+    cout << "           Case passed ...\n";
+    cout << "   Case 4: Aaron alive, Bob alive, Charlie dead\n";
+    assert(true == at_least_two_alive(true, true, false));
+    cout << "           Case passed ...\n";
+    cout << "   Case 5: Aaron dead, Bob dead, Charlie alive\n";
+    assert(false == at_least_two_alive(false, false, true));
+    cout << "           Case passed ...\n";
+    cout << "   Case 6: Aaron dead, Bob alive, Charlie dead\n";
+    assert(false == at_least_two_alive(false, true, false));
+    cout << "           Case passed ...\n";
+    cout << "   Case 7: Aaron alive, Bob dead, Charlie dead\n";
+    assert(false == at_least_two_alive(true, false, false));
+    cout << "           Case passed ...\n";
+    cout << "   Case 8: Aaron dead, Bob dead, Charlie dead\n";
+    assert(false == at_least_two_alive(false, false, false));
+    cout << "           Case passed ...\n";
+    cout << "Press any key to continue...";
+    cin.ignore().get();
+}
+
+void test_Aaron_shoots1(bool &B_alive, bool &C_alive)
+{
+    B_alive = true;
+    C_alive = true;
+
+    cout << "Unit Testing 2: Function Aaron_shoots1(Bob_alive, Charlie_alive)" << endl;
+
+    cout << "   Case 1: Bob is alive, Charlie is alive" << endl;
+    Aaron_shoots1(B_alive, C_alive);
+    assert(B_alive || C_alive);
+    cout << "           Aaron is shooting Charlie" << endl;
+
+    cout << "   Case 2: Bob is dead, Charlie is alive" << endl;
+    B_alive = false;
+    C_alive = true;
+    Aaron_shoots1(B_alive, C_alive);
+    assert(B_alive == false || !C_alive);
+    cout << "           Aaron is shooting Charlie" << endl;
+
+    cout << "   Case 3: Bob is alive, Charlie is dead" << endl;
+    B_alive = true;
+    C_alive = false;
+    Aaron_shoots1(B_alive, C_alive);
+    assert(!B_alive || C_alive == false);
+    cout << "           Aaron is shooting Bob" << endl;
+
+    B_alive = true;
+    C_alive = true;
+
+    cout << "Press any key to continue...";
+    cin.ignore().get();
+}
+
+void test_Bob_shoots(bool &A_alive, bool &C_alive)
+{
+    A_alive = true;
+    C_alive = true;
+
+    cout << "Unit Testing 3: Function Bob_shoots(Aaron_alive, Charlie_alive)" << endl;
+
+    cout << "   Case 1: Aaron is alive, Charlie is alive" << endl;
+    Bob_shoots(A_alive, C_alive);
+    assert(A_alive || C_alive);
+    cout << "           Bob is shooting Charlie" << endl;
+
+    cout << "   Case 2: Aaron is dead, Charlie is alive" << endl;
+    A_alive = false;
+    C_alive = true;
+    Bob_shoots(A_alive, C_alive);
+    assert(A_alive == false || !C_alive);
+    cout << "           Bob is shooting Charlie" << endl;
+
+    cout << "   Case 3: Aaron is alive, Charlie is dead" << endl;
+    A_alive = true;
+    C_alive = false;
+    Bob_shoots(A_alive, C_alive);
+    assert(!A_alive || C_alive == false);
+    cout << "           Bob is shooting Aaron" << endl;
+
+    A_alive = true;
+    C_alive = true;
+
+    cout << "Press any key to continue...";
+    cin.ignore().get();
+}
+
+void test_Charlie_shoots(bool &A_alive, bool &B_alive)
+{
+    A_alive = true;
+    B_alive = true;
+
+    cout << "Unit Testing 4: Function Charlie_shoots(Aaron_alive, Bob_alive)" << endl;
+
+    cout << "   Case 1: Aaron is alive, Bob is alive" << endl;
+    Charlie_shoots(A_alive, B_alive);
+    assert(B_alive == false);
+    cout << "           Charlie is shooting Bob" << endl;
+
+    cout << "   Case 2: Aaron is dead, Bob is alive" << endl;
+    A_alive = false;
+    B_alive = true;
+    Charlie_shoots(A_alive, B_alive);
+    assert(B_alive == false);
+    cout << "           Charlie is shooting Bob" << endl;
+
+    cout << "   Case 3: Aaron is alive, Bob is dead" << endl;
+    A_alive = true;
+    B_alive = false;
+    Charlie_shoots(A_alive, B_alive);
+    assert(A_alive == false);
+    cout << "           Charlie is shooting Aaron" << endl;
+
+    A_alive = true;
+    B_alive = true;
+
+    cout << "Press any key to continue...";
+    cin.ignore().get();
+}
+
+void test_Aaron_shoots2(bool &B_alive, bool &C_alive)
+{
+    B_alive = true;
+    C_alive = true;
+
+    cout << "Unit Testing 5: Function Aaron_shoots2(Bob_alive, Charlie_alive)" << endl;
+
+    cout << "   Case 1: Bob is alive, Charlie is alive" << endl;
+    Aaron_shoots2(B_alive, C_alive);
+    assert(B_alive && C_alive);
+    cout << "           Aaron intentionally missed his first shot" << endl;
+    cout << "           Both Bob and Charlie are alive" << endl;
+
+    cout << "   Case 2: Bob is dead, Charlie is alive" << endl;
+    B_alive = false;
+    C_alive = true;
+    Aaron_shoots2(B_alive, C_alive);
+    assert(B_alive == false || !C_alive);
+    cout << "           Aaron is shooting Charlie" << endl;
+
+    cout << "   Case 3: Bob is alive, Charlie is dead" << endl;
+    B_alive = true;
+    C_alive = false;
+    Aaron_shoots2(B_alive, C_alive);
+    assert(!B_alive || C_alive == false);
+    cout << "           Aaron is shooting Bob" << endl;
+
+    B_alive = true;
+    C_alive = true;
+
+    cout << "Press any key to continue...";
+    cin.ignore().get();
+}
+
 int main()
 {
     // Create boolean variables for each person, true if alive, false if dead.
@@ -310,6 +478,12 @@ int main()
     srand(static_cast<unsigned int>(time(0))); // Had to use copilot to get rid of this 'implicit conversion loses integer precision' warning
 
     cout << "*** Welcome to Jordan's Truel of the Fates Simulator ***" << endl;
+
+    test_at_least_two_alive();
+    test_Aaron_shoots1(Bob, Charlie);
+    test_Bob_shoots(Aaron, Charlie);
+    test_Charlie_shoots(Aaron, Bob);
+    test_Aaron_shoots2(Bob, Charlie);
 
     // Strategy 1
     cout << "Ready to test strategy 1 (run " << ITERATION_COUNT << " times):" << endl;
