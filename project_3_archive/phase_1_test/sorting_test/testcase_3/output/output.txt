@@ -1,0 +1,8 @@
+***Summarized Statistics***
+
+The orderly sorted list of 10 values is: 
+41 46 161 552 581 677 751 887 894 945 
+
+The mean is: 553.5
+The median is: 629
+The mode is: 553.5

@@ -1,0 +1,8 @@
+***Summarized Statistics***
+
+The orderly sorted list of 10 values is: 
+-856 -680 -596 -588 -548 -464 -376 -220 -41 -26 
+
+The mean is: -439.5
+The median is: -506
+The mode is: -439.5

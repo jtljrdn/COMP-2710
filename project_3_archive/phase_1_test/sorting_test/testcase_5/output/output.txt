@@ -1,0 +1,8 @@
+***Summarized Statistics***
+
+The orderly sorted list of 10 values is: 
+894606 2.89187e+06 3.97932e+06 5.62804e+06 5.78988e+06 5.99295e+06 6.68462e+06 7.31854e+06 9.14535e+06 9.66219e+06 
+
+The mean is: 5.79874e+06
+The median is: 5.89141e+06
+The mode is: 5.79874e+06

@@ -1,0 +1,15 @@
+***Summarized Statistics***
+
+The orderly sorted list of 5 values is: 
+-670.93 -636.02 -550.26 50.88 486.08 
+
+The mean is: -264.05
+The median is: -550.26
+The mode is: -264.05
+
+The chronologically sorted list of 5 values is: 
+486.08 -550.26 50.88 -670.93 -636.02 
+
+The mean is: -264.05
+The median is: 50.88
+The mode is: -264.05

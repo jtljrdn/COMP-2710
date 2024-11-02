@@ -1,0 +1,15 @@
+***Summarized Statistics***
+
+The orderly sorted list of 10 values is: 
+-97505.8 -78837.7 -59892.9 -50634.8 -47583 -42693.4 -16805 -5864.42 -4111.12 -1956.87 
+
+The mean is: -40588.5
+The median is: -45138.2
+The mode is: -40588.5
+
+The chronologically sorted list of 10 values is: 
+-1956.87 -4111.12 -97505.8 -50634.8 -5864.42 -47583 -59892.9 -78837.7 -42693.4 -16805 
+
+The mean is: -40588.5
+The median is: -26723.7
+The mode is: -40588.5

@@ -1,0 +1,8 @@
+***Summarized Statistics***
+
+The orderly sorted list of 5 values is: 
+96 448 460 602 894 
+
+The mean is: 500
+The median is: 460
+The mode is: 500

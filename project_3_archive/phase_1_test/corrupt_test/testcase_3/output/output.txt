@@ -1,0 +1,8 @@
+***Summarized Statistics***
+
+The orderly sorted list of 5 values is: 
+143 402 777 864 951 
+
+The mean is: 627.4
+The median is: 777
+The mode is: 627.4

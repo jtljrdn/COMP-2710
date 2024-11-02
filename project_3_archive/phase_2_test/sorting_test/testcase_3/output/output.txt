@@ -1,0 +1,15 @@
+***Summarized Statistics***
+
+The orderly sorted list of 10 values is: 
+14.02 17.18 20.45 61.78 64.26 68.54 75.43 79.23 83.61 85.1 
+
+The mean is: 56.96
+The median is: 66.4
+The mode is: 56.96
+
+The chronologically sorted list of 10 values is: 
+79.23 20.45 75.43 85.1 17.18 14.02 83.61 68.54 64.26 61.78 
+
+The mean is: 56.96
+The median is: 15.6
+The mode is: 56.96

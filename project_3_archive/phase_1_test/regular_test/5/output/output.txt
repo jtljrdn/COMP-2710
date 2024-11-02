@@ -1,0 +1,8 @@
+***Summarized Statistics***
+
+The orderly sorted list of 25 values is: 
+-853 -800 -727.32 -522 -437 -437 -371 -368 -281 -205 -51 205 295 395 448 454 497.2 601 632 709 766 786 883.69 951 986 
+
+The mean is: 142.263
+The median is: 295
+The mode is: -437

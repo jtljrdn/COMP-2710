@@ -1,0 +1,15 @@
+***Summarized Statistics***
+
+The orderly sorted list of 25 values is: 
+-98.52 -90.87 -83.31 -81.87 -50.97 -44.43 -43.3 -43.08 -35.2 -27.31 -21.59 -20.63 3.04 13.11 14.7 29 42.69 44.43 52.68 64.23 71.3 74.64 80.25 83.3 89.09 
+
+The mean is: 0.8552
+The median is: 3.04
+The mode is: 0.8552
+
+The chronologically sorted list of 25 values is: 
+52.68 29 74.64 71.3 -43.08 89.09 -20.63 13.11 3.04 44.43 -21.59 -27.31 -90.87 -50.97 80.25 -98.52 -43.3 -44.43 14.7 -35.2 -81.87 83.3 42.69 -83.31 64.23 
+
+The mean is: 0.8552
+The median is: -90.87
+The mode is: 0.8552
