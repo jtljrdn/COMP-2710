@@ -12,112 +12,93 @@ execute: `./project4_Lee_jtl0071.out`
 #include <list> // Doubly-Linked List
 using namespace std;
 
-/* Structs for storing question data */
+/* Struct for storing mcq answer data */
 struct answer // Struct for storing mcq answers. Ex key: `A`, answer: `C++ is an Object Oriented Programming Language`
 {
     char key;
     string answer;
 };
 
-// struct mcq // Multiple choice question. `question` string, `answers` list of `answer`, `points` double
-// {
-//     string question;
-//     list<answer> answers;
-//     double points;
-// };
-
-// struct tf // True/False Question
-// {
-//     string question;
-//     string answer;
-//     double points;
-// };
-
-// struct wr // Written Response Question
-// {
-//     string question;
-//     string answer;
-//     double points;
-// };
-
 class Question
 {
 private:
+    string type;
     string question;
-    int value;
+    list<answer> mcqAnswers;
+    bool tfAnswer;
+    string wrAnswer;
+    char correct;
+    string wrCorrect;
+    double value;
 
 public:
-    Question(string question, int value)
+    Question(string type, string question, list<answer> answers, char correct, double value) // MCQ
     {
+        mcqAnswers = answers;
+        this->type = type;
         this->question = question;
-        this->value = value;
-    }
-    Question()
-    {
-        this->value = 0;
-    }
-};
-class Mcq : public Question
-{
-public:
-    string question;
-    list<answer> answers;
-    char correct;
-    int value;
-    Mcq(string question, list<answer> answers, char correct, int value)
-    {
-        this->question = question;
-        this->answers = answers;
         this->correct = correct;
         this->value = value;
     }
-};
-class Tf : public Question
-{
-public:
-    string question;
-    bool answer;
-    int value;
-    Tf(string question, bool answer, int value)
+    Question(string type, string question, bool answer, char correct, double value) // TF
     {
+        tfAnswer = answer;
+        this->type = type;
         this->question = question;
-        this->answer = answer;
+        this->correct = correct;
         this->value = value;
     }
-};
-class Wr : public Question
-{
-public:
-    string question;
-    string answer;
-    int value;
-    Wr(string question, string answer, int value)
+    Question(string type, string question, string answer, string correct, double value) // WR
     {
+        wrAnswer = answer;
+        this->type = type;
         this->question = question;
-        this->answer = answer;
+        this->wrCorrect = correct;
         this->value = value;
     }
-};
-list<Question> Questions;
-/*-----------------*/
 
-void newQuestion(int num)
+    // Getters
+    string getQuestion()
+    {
+        return this->question;
+    }
+
+    string getType()
+    {
+        return this->type;
+    }
+
+    double getValue(){
+        return this->value;
+    }
+
+    list<answer> getMcqAnswers()
+    {
+        return mcqAnswers;
+    }
+};
+
+Question newQuestion(int num)
 {
     string type;
+    string questionName;
+
+    double value;
+
     cout << "=== QUESTION " << num << " ===\n";
     cout << "Type of question [mcq/tf/wr]: ";
     cin >> type;
     cout << "\n";
     if (type == "mcq")
     {
-        string questionName;
+        char correctAnswer;
         char key = 65; // ascii A
         list<answer> answers;
         answer answer;
 
         cout << "Enter a question: ";
         cin >> questionName;
-        cout << "\n[At any time, type \033[31mquit() \033[0mto exit]\n\n";
+        cout << "[At any time, type \033[31mquit() \033[0mto exit]\n\n";
 
         while (true)
         {
@@ -140,43 +121,77 @@ void newQuestion(int num)
             }
             answer.answer = tempAnswer;
             answers.push_back(answer);
-            cout << "Added answer to answers list\n";
             key++;
             if (key - 65 >= 26)
-            { // If A-Z is occupied, break loop.
+            { // If A-Z is fully occupied, break loop.
                 break;
             }
         }
 
-        while (true){
-            
+        while (true)
+        {
+            cout << "\nSelect correct answer: ";
+            cin >> correctAnswer;
+            if (correctAnswer < 65 || correctAnswer >= 65 + answers.size() || !cin)
+            {
+                cout << "[Answer not recognized, please try again!]\n";
+                continue;
+            }
+            break;
         }
+
+        while (true)
+        {
+            cout << "Enter point value: ";
+            cin >> value;
+            if (value <= 0 || !cin)
+            {
+                cout << "[Answer not recognized, please try again!]\n";
+                continue;
+            }
+            break;
+        }
+
+        return Question(type, questionName, answers, correctAnswer, value);
     }
 }
 
 int main()
 {
     int questionCount = 1;
+    list<Question> Questions;
 
     cout << "*** Welcome to Jordan's Testing Service ***\n\n";
 
     while (true)
     {
+        Question question = newQuestion(questionCount);
+        Questions.push_back(question);
+
         string response;
-        newQuestion(questionCount);
-        cout << "Continue? [y/n]: ";
+        cout << "Question Saved. Continue? [y/n]: ";
         cin >> response;
+        cout << "\n";
         if (response == "n")
         {
             break;
         }
         else if (response == "y")
         {
+            questionCount++;
+            continue;
         }
-        else
+    }
+
+    for (auto i : Questions)
+    {
+        cout << i.getType() << " | " << i.getQuestion() << " | " << i.getValue() << endl;
+        if (i.getType() == "mcq")
         {
-            
+            for (auto j : i.getMcqAnswers())
+            {
+                cout << j.key << ": " << j.answer << endl;
+            }
         }
-        questionCount++;
     }
 }
