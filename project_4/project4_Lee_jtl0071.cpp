@@ -118,22 +118,25 @@ public:
     }
 };
 
-int addPoints(list<Question> q){
+int addPoints(list<Question> q)
+{
     int points = 0;
-    for(auto i : q)
+    for (auto i : q)
     {
         points += i.getValue();
     }
     return points;
 }
-Question createMcq(string &questionName, double &value);
+
+Question createMcq();
+
+Question createTf();
+
+Question createWr();
 
 Question newQuestion(int num)
 {
     string type;
-    string questionName;
-
-    double value;
 
     cout << "=== QUESTION " << num << " ===\n";
     cout << "Type of question [mcq/tf/wr]: ";
@@ -141,13 +144,19 @@ Question newQuestion(int num)
     cout << "\n";
     if (type == "mcq")
     {
-        return createMcq(questionName, value);
+        return createMcq();
+    }
+    else if (type == "tf")
+    {
+        return createTf();
     }
 }
 
-Question createMcq(string &questionName, double &value)
+Question createMcq()
 {
     char correctAnswer;
+    string questionName;
+    double value;
     char key = 65; // ascii A
     list<answer> answers;
     answer answer;
@@ -202,13 +211,58 @@ Question createMcq(string &questionName, double &value)
         cin >> value;
         if (value <= 0 || !cin)
         {
-            cout << "[Answer not recognized, please try again!]\n";
+            cout << "[Not a point value, please try again!]\n";
             continue;
         }
         break;
     }
 
     return Question("mcq", questionName, answers, correctAnswer, value);
+}
+
+Question createTf()
+{
+    string questionName;
+    double value;
+    bool correctAnswer;
+
+    cout << "Enter a question: ";
+    cin >> questionName;
+    cout << "\n";
+
+    while (true)
+    {
+        string tempAnswer;
+        cout << "Select correct answer [(t)rue/(f)alse]: ";
+        cin >> tempAnswer;
+        if (tempAnswer == "true" || tempAnswer == "t")
+        {
+            correctAnswer = true;
+            break;
+        } else if (tempAnswer == "false" || tempAnswer == "f")
+        {
+            correctAnswer = false;
+            break;
+        } else
+        {
+            cout << "[Answer not recognized, please try again!]\n";
+            continue;
+        }
+    }
+
+    while (true)
+    {
+        cout << "Enter point value: ";
+        cin >> value;
+        if (value <= 0 || !cin)
+        {
+            cout << "[Not a point value, please try again!]\n";
+            continue;
+        }
+        break;
+    }
+
+    return Question("tf", questionName, correctAnswer, value);
 }
 
 int main()
@@ -243,19 +297,27 @@ int main()
     cout << "Total Quesions: " << Questions.size() << endl;
     cout << "Total point values: " << addPoints(Questions) << endl;
 
-    while (true){
+    while (true)
+    {
         response = "";
         cout << "Begin Assessment? [y/n]: ";
         cin >> response;
         cout << "\n";
-        if (response == "n"){
+        if (response == "n")
+        {
             cout << "*** Thank you for using the testing service. Goodbye! ***\n";
             return 0;
-        } else if (response == "y"){
+        }
+        else if (response == "y")
+        {
             break;
-        } else if (!cin){
+        }
+        else if (!cin)
+        {
             cout << "Invalid Input. Please try again.\n";
-        } else {
+        }
+        else
+        {
             cout << "Invalid Input. Please try again.\n";
         }
     }
@@ -269,6 +331,9 @@ int main()
             {
                 cout << j.key << ": " << j.answer << endl;
             }
+        }
+        if (i.getType() == "tf"){
+            cout << i.getTfAnswer() << endl;
         }
     }
 }
