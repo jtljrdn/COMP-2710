@@ -126,6 +126,7 @@ int addPoints(list<Question> q){
     }
     return points;
 }
+Question createMcq(string &questionName, double &value);
 
 Question newQuestion(int num)
 {
@@ -140,69 +141,74 @@ Question newQuestion(int num)
     cout << "\n";
     if (type == "mcq")
     {
-        char correctAnswer;
-        char key = 65; // ascii A
-        list<answer> answers;
-        answer answer;
+        return createMcq(questionName, value);
+    }
+}
 
-        cout << "Enter a question: ";
-        cin >> questionName;
-        cout << "[At any time, type \033[31mquit() \033[0mto exit]\n\n";
+Question createMcq(string &questionName, double &value)
+{
+    char correctAnswer;
+    char key = 65; // ascii A
+    list<answer> answers;
+    answer answer;
 
-        while (true)
+    cout << "Enter a question: ";
+    cin >> questionName;
+    cout << "[At any time, type \033[31mquit() \033[0mto exit]\n\n";
+
+    while (true)
+    {
+        string tempAnswer;
+
+        cout << "Enter Choice " << key << ": ";
+        answer.key = key;
+        cin >> tempAnswer;
+        if (tempAnswer == "quit()")
         {
-            string tempAnswer;
-
-            cout << "Enter Choice " << key << ": ";
-            answer.key = key;
-            cin >> tempAnswer;
-            if (tempAnswer == "quit()")
+            if (key > 65)
             {
-                if (key > 65)
-                {
-                    break;
-                }
-                else
-                {
-                    cout << "[Atleast one answer is required.]\n\n";
-                    continue;
-                }
-            }
-            answer.answer = tempAnswer;
-            answers.push_back(answer);
-            key++;
-            if (key - 65 >= 26)
-            { // If A-Z is fully occupied, break loop.
                 break;
             }
-        }
-
-        while (true)
-        {
-            cout << "\nSelect correct answer: ";
-            cin >> correctAnswer;
-            if (correctAnswer < 65 || correctAnswer >= 65 + answers.size() || !cin)
+            else
             {
-                cout << "[Answer not recognized, please try again!]\n";
+                cout << "[Atleast one answer is required.]\n\n";
                 continue;
             }
+        }
+        answer.answer = tempAnswer;
+        answers.push_back(answer);
+        key++;
+        if (key - 65 >= 26)
+        { // If A-Z is fully occupied, break loop.
             break;
         }
-
-        while (true)
-        {
-            cout << "Enter point value: ";
-            cin >> value;
-            if (value <= 0 || !cin)
-            {
-                cout << "[Answer not recognized, please try again!]\n";
-                continue;
-            }
-            break;
-        }
-
-        return Question(type, questionName, answers, correctAnswer, value);
     }
+
+    while (true)
+    {
+        cout << "\nSelect correct answer: ";
+        cin >> correctAnswer;
+        if (correctAnswer < 65 || correctAnswer >= 65 + answers.size() || !cin)
+        {
+            cout << "[Answer not recognized, please try again!]\n";
+            continue;
+        }
+        break;
+    }
+
+    while (true)
+    {
+        cout << "Enter point value: ";
+        cin >> value;
+        if (value <= 0 || !cin)
+        {
+            cout << "[Answer not recognized, please try again!]\n";
+            continue;
+        }
+        break;
+    }
+
+    return Question("mcq", questionName, answers, correctAnswer, value);
 }
 
 int main()
