@@ -62,7 +62,7 @@ public:
     }
 
     // Constructor for WR
-    Question(string type, string question, string answer, string correct, double value)
+    Question(string type, string question, string answer, double value)
     {
         if (type != "wr")
         {
@@ -72,7 +72,6 @@ public:
         wrAnswer = answer;
         this->type = type;
         this->question = question;
-        this->wrCorrect = correct;
         this->value = value;
     }
 
@@ -142,13 +141,25 @@ Question newQuestion(int num)
     cout << "Type of question [mcq/tf/wr]: ";
     cin >> type;
     cout << "\n";
-    if (type == "mcq")
+    while (true)
     {
-        return createMcq();
-    }
-    else if (type == "tf")
-    {
-        return createTf();
+        if (type == "mcq")
+        {
+            return createMcq();
+        }
+        else if (type == "tf")
+        {
+            return createTf();
+        }
+        else if (type == "wr")
+        {
+            return createWr();
+        }
+        else
+        {
+            cout << "[Invalid Input, please try again]\n";
+            continue;
+        }
     }
 }
 
@@ -239,11 +250,13 @@ Question createTf()
         {
             correctAnswer = true;
             break;
-        } else if (tempAnswer == "false" || tempAnswer == "f")
+        }
+        else if (tempAnswer == "false" || tempAnswer == "f")
         {
             correctAnswer = false;
             break;
-        } else
+        }
+        else
         {
             cout << "[Answer not recognized, please try again!]\n";
             continue;
@@ -263,6 +276,48 @@ Question createTf()
     }
 
     return Question("tf", questionName, correctAnswer, value);
+}
+
+Question createWr()
+{
+    string questionName;
+    double value;
+    string correctAnswer;
+
+    cout << "Enter a question: ";
+    cin >> questionName;
+    cout << "\n";
+
+    while (true)
+    {
+        string tempAnswer;
+        cout << "Type correct answer: ";
+        cin >> tempAnswer;
+        if (tempAnswer == "")
+        {
+            cout << "[Answer cannot be empty]\n";
+            continue;
+        }
+        else
+        {
+            correctAnswer = tempAnswer;
+            break;
+        }
+    }
+
+    while (true)
+    {
+        cout << "Enter point value: ";
+        cin >> value;
+        if (value <= 0 || !cin)
+        {
+            cout << "[Not a point value, please try again!]\n";
+            continue;
+        }
+        break;
+    }
+
+    return Question("wr", questionName, correctAnswer, value);
 }
 
 int main()
@@ -332,8 +387,12 @@ int main()
                 cout << j.key << ": " << j.answer << endl;
             }
         }
-        if (i.getType() == "tf"){
+        if (i.getType() == "tf")
+        {
             cout << i.getTfAnswer() << endl;
+        }
+        if (i.getType() == "wr"){
+            cout << i.getWrAnswer() << endl;
         }
     }
 }
