@@ -529,9 +529,27 @@ void editQuestion(list<Question> &Questions)
                             }
                         }
                     }
+                    else if (choice == "4")
+                    {
+                        int newValue;
+                        while (true)
+                        {
+                            cout << "Enter point value: ";
+                            cin >> newValue;
+                            if (cin.fail() || newValue <= 0)
+                            {
+                                cin.clear();                                         // clear the error state
+                                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore invalid input
+                                cout << "[Not a point value, please try again!]\n";
+                                continue;
+                            }
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore any extra input
+                            break;
+                        }
+                        itr->setValue(newValue);
+                    }
                 }
             }
-
             break;
         }
     }
