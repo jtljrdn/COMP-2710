@@ -475,24 +475,5 @@ int main()
     cout << "Correct answers: " << finalResult.correct << "/" << Questions.size() << endl;
     cout << "Final score: " << finalResult.score << "/" << addPoints(Questions) << endl;
     cout << "\n*** Thank you for using the testing service. Goodbye! ***\n";
-
-    // for (auto i : Questions)
-    // {
-    //     cout << i.getType() << " | " << i.getQuestion() << " | " << i.getValue() << endl;
-    //     if (i.getType() == "mcq")
-    //     {
-    //         for (auto j : i.getMcqAnswers())
-    //         {
-    //             cout << j.key << ": " << j.answer << endl;
-    //         }
-    //     }
-    //     if (i.getType() == "tf")
-    //     {
-    //         cout << i.getTfAnswer() << endl;
-    //     }
-    //     if (i.getType() == "wr")
-    //     {
-    //         cout << i.getWrAnswer() << endl;
-    //     }
-    // }
+    
 }
