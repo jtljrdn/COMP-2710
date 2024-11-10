@@ -34,7 +34,6 @@ private:
     bool tfAnswer;
     string wrAnswer;
     char correct;
-    string wrCorrect;
     double value;
 
 public:
@@ -115,11 +114,6 @@ public:
     char getCorrect() const
     {
         return correct;
-    }
-
-    string getWrCorrect() const
-    {
-        return wrCorrect;
     }
 };
 
@@ -359,9 +353,54 @@ Result startTest(list<Question> Questions)
                     cout << "[Your answer is incorrect. The correct answer is " << question.getCorrect() << ".]\n\n";
                     break;
                 } else {
-                    cout << "[You answer is correct!]\n\n";
+                    cout << "[Your answer is correct!]\n\n";
                     score += question.getValue();
                     correct++;
+                    break;
+                }
+            }
+        }
+        else if (question.getType() == "tf")
+        {
+            while (true){
+                string tempAnswer;
+                bool answer;
+                cout << "Your answer [(t)rue/(f)alse]: ";
+                cin >> tempAnswer;
+                if (tempAnswer == "true" || tempAnswer == "t"){
+                    answer = true;
+                } else if (tempAnswer == "false" || tempAnswer == "f")
+                {
+                    answer = false;
+                } else {
+                    cout << "[Answer not recognized, please try again]\n";
+                    continue;
+                }
+                if (answer == question.getTfAnswer())
+                {
+                    cout << "[Your answer is correct!]\n\n";
+                    correct++;
+                    score += question.getValue();
+                    break;
+                } else {
+                    cout << "[Your answer is incorrect. The correct answer is " << (question.getCorrect() == true ? "true" : "false") << ".]\n\n";
+                    break;
+                }
+            }
+        } else if (question.getType() == "wr")
+        {
+            while (true){
+                string answer;
+                cout << "Your answer: ";
+                cin >> answer;
+                if (answer == question.getWrAnswer())
+                {
+                    cout << "[Your answer is correct!]\n\n";
+                    correct++;
+                    score += question.getValue();
+                    break;
+                } else {
+                    cout << "[Your answer is incorrect. The correct answer is \033[31m" << question.getWrAnswer() << "\033[0m.]\n\n";
                     break;
                 }
             }
@@ -408,7 +447,7 @@ int main()
     while (true)
     {
         response = "";
-        cout << "Begin Assessment? [y/n]: ";
+        cout << "\nBegin Assessment? [y/n]: ";
         cin >> response;
         cout << "\n";
         if (response == "n")
@@ -435,7 +474,7 @@ int main()
     cout << "=== SESSION LOG ===\n";
     cout << "Correct answers: " << finalResult.correct << "/" << Questions.size() << endl;
     cout << "Final score: " << finalResult.score << "/" << addPoints(Questions) << endl;
-    cout << "\n*** Thank you for using the testing service. Goodbye! ***";
+    cout << "\n*** Thank you for using the testing service. Goodbye! ***\n";
 
     // for (auto i : Questions)
     // {
