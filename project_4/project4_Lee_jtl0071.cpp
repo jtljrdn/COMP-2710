@@ -26,7 +26,7 @@ struct Result
     double score;
 };
 
-class Question
+class Question // Class for creating `Question` objects
 {
 private:
     string type;
