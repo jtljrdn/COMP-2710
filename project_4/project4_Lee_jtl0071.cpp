@@ -11,6 +11,7 @@ execute: `./project4_Lee_jtl0071.out`
 #include <iostream>
 #include <list> // Doubly-Linked List
 using namespace std;
+#include <limits>
 
 /* Struct for storing mcq answer data */
 struct answer // Struct for storing mcq answers. Ex key: `A`, answer: `C++ is an Object Oriented Programming Language`
@@ -175,7 +176,8 @@ Question createMcq()
     answer answer;
 
     cout << "Enter a question: ";
-    cin >> questionName;
+    cin.ignore(); // To ignore any leftover newline character in the input buffer
+    getline(cin, questionName);
     cout << "[At any time, type \033[31mquit() \033[0mto exit]\n\n";
 
     while (true)
@@ -222,11 +224,14 @@ Question createMcq()
     {
         cout << "Enter point value: ";
         cin >> value;
-        if (value <= 0 || !cin)
+        if (cin.fail() || value <= 0)
         {
+            cin.clear();                                         // clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore invalid input
             cout << "[Not a point value, please try again!]\n";
             continue;
         }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore any extra input
         break;
     }
 
@@ -240,7 +245,8 @@ Question createTf()
     bool correctAnswer;
 
     cout << "Enter a question: ";
-    cin >> questionName;
+    cin.ignore(); // To ignore any leftover newline character in the input buffer
+    getline(cin, questionName);
     cout << "\n";
 
     while (true)
@@ -269,11 +275,14 @@ Question createTf()
     {
         cout << "Enter point value: ";
         cin >> value;
-        if (value <= 0 || !cin)
+        if (cin.fail() || value <= 0)
         {
+            cin.clear();                                         // clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore invalid input
             cout << "[Not a point value, please try again!]\n";
             continue;
         }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore any extra input
         break;
     }
 
@@ -287,7 +296,8 @@ Question createWr()
     string correctAnswer;
 
     cout << "Enter a question: ";
-    cin >> questionName;
+    cin.ignore(); // To ignore any leftover newline character in the input buffer
+    getline(cin, questionName);
     cout << "\n";
 
     while (true)
@@ -311,11 +321,14 @@ Question createWr()
     {
         cout << "Enter point value: ";
         cin >> value;
-        if (value <= 0 || !cin)
+        if (cin.fail() || value <= 0)
         {
+            cin.clear();                                         // clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore invalid input
             cout << "[Not a point value, please try again!]\n";
             continue;
         }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore any extra input
         break;
     }
 
@@ -348,11 +361,14 @@ Result startTest(list<Question> Questions)
                 {
                     cout << "[Answer not recognized, please try again!]\n";
                     continue;
-                } else if (userAnswer != question.getCorrect())
+                }
+                else if (userAnswer != question.getCorrect())
                 {
                     cout << "[Your answer is incorrect. The correct answer is " << question.getCorrect() << ".]\n\n";
                     break;
-                } else {
+                }
+                else
+                {
                     cout << "[Your answer is correct!]\n\n";
                     score += question.getValue();
                     correct++;
@@ -362,17 +378,22 @@ Result startTest(list<Question> Questions)
         }
         else if (question.getType() == "tf")
         {
-            while (true){
+            while (true)
+            {
                 string tempAnswer;
                 bool answer;
                 cout << "Your answer [(t)rue/(f)alse]: ";
                 cin >> tempAnswer;
-                if (tempAnswer == "true" || tempAnswer == "t"){
+                if (tempAnswer == "true" || tempAnswer == "t")
+                {
                     answer = true;
-                } else if (tempAnswer == "false" || tempAnswer == "f")
+                }
+                else if (tempAnswer == "false" || tempAnswer == "f")
                 {
                     answer = false;
-                } else {
+                }
+                else
+                {
                     cout << "[Answer not recognized, please try again]\n";
                     continue;
                 }
@@ -382,14 +403,18 @@ Result startTest(list<Question> Questions)
                     correct++;
                     score += question.getValue();
                     break;
-                } else {
+                }
+                else
+                {
                     cout << "[Your answer is incorrect. The correct answer is " << (question.getCorrect() == true ? "true" : "false") << ".]\n\n";
                     break;
                 }
             }
-        } else if (question.getType() == "wr")
+        }
+        else if (question.getType() == "wr")
         {
-            while (true){
+            while (true)
+            {
                 string answer;
                 cout << "Your answer: ";
                 cin >> answer;
@@ -399,7 +424,9 @@ Result startTest(list<Question> Questions)
                     correct++;
                     score += question.getValue();
                     break;
-                } else {
+                }
+                else
+                {
                     cout << "[Your answer is incorrect. The correct answer is \033[31m" << question.getWrAnswer() << "\033[0m.]\n\n";
                     break;
                 }
@@ -475,5 +502,4 @@ int main()
     cout << "Correct answers: " << finalResult.correct << "/" << Questions.size() << endl;
     cout << "Final score: " << finalResult.score << "/" << addPoints(Questions) << endl;
     cout << "\n*** Thank you for using the testing service. Goodbye! ***\n";
-    
 }
