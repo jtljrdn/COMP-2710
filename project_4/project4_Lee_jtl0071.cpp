@@ -81,6 +81,10 @@ public:
         this->value = value;
     }
 
+    Question()
+    {
+    }
+
     // Getters
     string getQuestion() const
     {
@@ -115,6 +119,43 @@ public:
     char getCorrect() const
     {
         return correct;
+    }
+
+    // Setters
+
+    void setQuestion(string q)
+    {
+        this->question = q;
+    }
+
+    void setType(string t)
+    {
+        this->type = t;
+    }
+
+    void setMcqAnswers(list<answer> answers)
+    {
+        this->mcqAnswers = answers;
+    }
+
+    void setTfAnswer(bool answer)
+    {
+        this->tfAnswer = answer;
+    }
+
+    void setWrAnswer(string answer)
+    {
+        this->wrAnswer = answer;
+    }
+
+    void setCorrect(char c)
+    {
+        this->correct = c;
+    }
+
+    void setValue(double v)
+    {
+        this->value = v;
     }
 };
 
@@ -186,7 +227,7 @@ Question createMcq()
 
         cout << "Enter Choice " << key << ": ";
         answer.key = key;
-        cin >> tempAnswer;
+        getline(cin, tempAnswer);
         if (tempAnswer == "quit()")
         {
             if (key > 65)
@@ -304,7 +345,7 @@ Question createWr()
     {
         string tempAnswer;
         cout << "Type correct answer: ";
-        cin >> tempAnswer;
+        getline(cin, tempAnswer);
         if (tempAnswer == "")
         {
             cout << "[Answer cannot be empty]\n";
@@ -333,6 +374,165 @@ Question createWr()
     }
 
     return Question("wr", questionName, correctAnswer, value);
+}
+
+void editQuestionName(std::__1::list<Question> &Questions, int questionNumToEdit);
+
+void editQuestion(list<Question> &Questions)
+{
+    string type;
+    while (true)
+    {
+        int questionNumToEdit;
+        cout << "Select a question to edit, or type quit() [1-" << Questions.size() << "]: ";
+        cin >> questionNumToEdit;
+        if (questionNumToEdit <= 0 || questionNumToEdit > Questions.size())
+        {
+            cout << "[That question does not exist!]\n";
+            continue;
+        }
+        else
+        {
+            auto itr = Questions.begin();
+            for (size_t i = 1; i <= Questions.size(); i++, itr++)
+            {
+                if (i == questionNumToEdit)
+                {
+                    cout << "===============================\n";
+                    cout << "=== QUESTION " << questionNumToEdit << " SAVED VALUES ===\n";
+                    cout << "===============================\n";
+                    cout << "   1. Type: " << itr->getType() << "\n";
+                    cout << "   2. Question: " << itr->getQuestion() << "\n";
+                    if (itr->getType() == "mcq")
+                    {
+                        cout << "   3. Answer choices: " << itr->getType() << "\n";
+                        for (auto choice : itr->getMcqAnswers())
+                        {
+
+                            cout << "       " << choice.key << ". " << choice.answer << "\n";
+                        }
+                    }
+                    else if (itr->getType() == "tf")
+                    {
+                        if (itr->getTfAnswer() == true)
+                        {
+                            cout << "   3. Answer: True\n";
+                        }
+                        else if (itr->getTfAnswer() == false)
+                        {
+                            cout << "   3. Answer: False\n";
+                        }
+                    }
+                    else if (itr->getType() == "wr")
+                    {
+                        cout << "   3. Answer: " << itr->getWrAnswer() << "\n";
+                    }
+
+                    cout << "   4. Value: " << itr->getValue() << "\n";
+
+                    cout << "===============================\n";
+                    string choice;
+                    cout << "Type a number to edit, or type quit(): ";
+                    cin >> choice;
+                    cin.ignore();
+
+                    if (choice == "1") // Edit Type
+                    {
+                        cout << "[Not currently supported.]\n";
+                        continue;
+                    }
+                    else if (choice == "2") // Edit Question
+                    {
+                        editQuestionName(Questions, questionNumToEdit);
+                    }
+                    else if (choice == "3") // Edit Answer(s)
+                    {
+                        if (itr->getType() == "mcq")
+                        {
+                            cout << "[At any time, type \033[31mquit() \033[0mto exit]\n\n";
+                            char key = 65; // ascii A
+                            list<answer> answers;
+                            answer answer;
+                            while (true)
+                            {
+                                string tempAnswer;
+
+                                cout << "Enter Choice " << key << ": ";
+                                answer.key = key;
+                                getline(cin, tempAnswer);
+                                cout << tempAnswer << " | quit()\n";
+                                if (tempAnswer == "quit()")
+                                {
+                                    if (key > 65)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        cout << "[Atleast one answer is required.]\n\n";
+                                        continue;
+                                    }
+                                }
+                                answer.answer = tempAnswer;
+                                answers.push_back(answer);
+                                key++;
+                                if (key - 65 >= 26)
+                                { // If A-Z is fully occupied, break loop.
+                                    break;
+                                }
+                            }
+                            itr->setMcqAnswers(answers);
+                            cout << "[Successfully changed answers!]\n";
+                        }
+                        else if (itr->getType() == "tf")
+                        {
+                            while (true)
+                            {
+                                string tempAnswer;
+                                cout << "Select correct answer [(t)rue/(f)alse]: ";
+                                cin >> tempAnswer;
+                                if (tempAnswer == "true" || tempAnswer == "t")
+                                {
+                                    itr->setTfAnswer(true);
+                                    break;
+                                }
+                                else if (tempAnswer == "false" || tempAnswer == "f")
+                                {
+                                    itr->setTfAnswer(false);
+                                    break;
+                                }
+                                else
+                                {
+                                    cout << "[Answer not recognized, please try again!]\n";
+                                    continue;
+                                }
+                            }
+                            cout << "[Successfully changed answer!]\n";
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+    }
+}
+
+void editQuestionName(list<Question> &Questions, int questionNumToEdit)
+{
+    string newQuestionName;
+    cout << "Enter new question: ";
+    getline(cin, newQuestionName);
+    auto itr = Questions.begin();
+    for (size_t i = 1; i <= Questions.size(); i++, itr++)
+    {
+        if (i == questionNumToEdit)
+        {
+            itr->setQuestion(newQuestionName);
+            cout << "[Successfully changed question!]\n";
+            break;
+        }
+    }
 }
 
 Result startTest(list<Question> Questions)
@@ -417,7 +617,8 @@ Result startTest(list<Question> Questions)
             {
                 string answer;
                 cout << "Your answer: ";
-                cin >> answer;
+                cin.ignore();
+                getline(cin, answer);
                 if (answer == question.getWrAnswer())
                 {
                     cout << "[Your answer is correct!]\n\n";
@@ -469,7 +670,13 @@ int main()
         }
         else if (response == "2") // Edit Question
         {
-
+            if (Questions.empty())
+            {
+                cout << "[There must be atleast 1 question to edit.]\n";
+                continue;
+            }
+            editQuestion(Questions);
+            continue;
         }
         else if (response == "3") // Delete Question
         {
@@ -477,7 +684,8 @@ int main()
         else if (response == "4")
         {
             break;
-        } else
+        }
+        else
         {
             cout << "[Invalid response. Please try again]\n";
         }
