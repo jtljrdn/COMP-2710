@@ -19,6 +19,12 @@ struct answer // Struct for storing mcq answers. Ex key: `A`, answer: `C++ is an
     string answer;
 };
 
+struct Result
+{
+    int correct;
+    double score;
+};
+
 class Question
 {
 private:
@@ -117,9 +123,9 @@ public:
     }
 };
 
-int addPoints(list<Question> q)
+double addPoints(list<Question> q)
 {
-    int points = 0;
+    double points = 0;
     for (auto i : q)
     {
         points += i.getValue();
@@ -138,11 +144,13 @@ Question newQuestion(int num)
     string type;
 
     cout << "=== QUESTION " << num << " ===\n";
-    cout << "Type of question [mcq/tf/wr]: ";
-    cin >> type;
-    cout << "\n";
+
     while (true)
     {
+        cout << "Type of question [mcq/tf/wr]: ";
+        cin >> type;
+        cout << "\n";
+
         if (type == "mcq")
         {
             return createMcq();
@@ -320,6 +328,51 @@ Question createWr()
     return Question("wr", questionName, correctAnswer, value);
 }
 
+Result startTest(list<Question> Questions)
+{
+    int count = 0;
+    double score = 0;
+    int correct = 0;
+    Result result;
+
+    for (auto question : Questions)
+    {
+        count++;
+        cout << "Question " << count << ": " << question.getQuestion() << endl;
+        if (question.getType() == "mcq")
+        {
+            for (auto choice : question.getMcqAnswers())
+            {
+                cout << "   " << choice.key << ". " << choice.answer << endl;
+            }
+            while (true)
+            {
+                char userAnswer;
+                cout << "\nSelect correct answer: ";
+                cin >> userAnswer;
+                if (userAnswer < 65 || userAnswer >= 65 + question.getMcqAnswers().size() || !cin)
+                {
+                    cout << "[Answer not recognized, please try again!]\n";
+                    continue;
+                } else if (userAnswer != question.getCorrect())
+                {
+                    cout << "[Your answer is incorrect. The correct answer is " << question.getCorrect() << ".]\n\n";
+                    break;
+                } else {
+                    cout << "[You answer is correct!]\n\n";
+                    score += question.getValue();
+                    correct++;
+                    break;
+                }
+            }
+        }
+    }
+    cout << "Assessment Complete.\n\n";
+    result.correct = correct;
+    result.score = score;
+    return result;
+}
+
 int main()
 {
     int questionCount = 1;
@@ -377,22 +430,30 @@ int main()
         }
     }
 
-    for (auto i : Questions)
-    {
-        cout << i.getType() << " | " << i.getQuestion() << " | " << i.getValue() << endl;
-        if (i.getType() == "mcq")
-        {
-            for (auto j : i.getMcqAnswers())
-            {
-                cout << j.key << ": " << j.answer << endl;
-            }
-        }
-        if (i.getType() == "tf")
-        {
-            cout << i.getTfAnswer() << endl;
-        }
-        if (i.getType() == "wr"){
-            cout << i.getWrAnswer() << endl;
-        }
-    }
+    Result finalResult = startTest(Questions);
+
+    cout << "=== SESSION LOG ===\n";
+    cout << "Correct answers: " << finalResult.correct << "/" << Questions.size() << endl;
+    cout << "Final score: " << finalResult.score << "/" << addPoints(Questions) << endl;
+    cout << "\n*** Thank you for using the testing service. Goodbye! ***";
+
+    // for (auto i : Questions)
+    // {
+    //     cout << i.getType() << " | " << i.getQuestion() << " | " << i.getValue() << endl;
+    //     if (i.getType() == "mcq")
+    //     {
+    //         for (auto j : i.getMcqAnswers())
+    //         {
+    //             cout << j.key << ": " << j.answer << endl;
+    //         }
+    //     }
+    //     if (i.getType() == "tf")
+    //     {
+    //         cout << i.getTfAnswer() << endl;
+    //     }
+    //     if (i.getType() == "wr")
+    //     {
+    //         cout << i.getWrAnswer() << endl;
+    //     }
+    // }
 }
