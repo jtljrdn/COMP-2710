@@ -445,25 +445,41 @@ int main()
     list<Question> Questions;
     string response;
 
-    cout << "*** Welcome to Jordan's Testing Service ***\n\n";
+    cout << "*** Welcome to Jordan's Testing Service ***\n";
 
     while (true)
     {
         response = "";
-        Question question = newQuestion(questionCount);
-        Questions.push_back(question);
 
-        cout << "Question Saved. Continue? [y/n]: ";
+        cout << "\nDo you want to?\n";
+        cout << "   1. Create new question.\n";
+        cout << "   2. Edit question.\n";
+        cout << "   3. Delete question.\n";
+        cout << "   4. Finish.\n";
+
+        cout << "Select an action: ";
         cin >> response;
         cout << "\n";
-        if (response == "n")
+        if (response == "1") // New Question
         {
-            break;
-        }
-        else if (response == "y")
-        {
+            Question question = newQuestion(questionCount);
+            Questions.push_back(question);
             questionCount++;
             continue;
+        }
+        else if (response == "2") // Edit Question
+        {
+
+        }
+        else if (response == "3") // Delete Question
+        {
+        }
+        else if (response == "4")
+        {
+            break;
+        } else
+        {
+            cout << "[Invalid response. Please try again]\n";
         }
     }
 
