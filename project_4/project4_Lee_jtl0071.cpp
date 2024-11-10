@@ -509,6 +509,25 @@ void editQuestion(list<Question> &Questions)
                             }
                             cout << "[Successfully changed answer!]\n";
                         }
+                        else if (itr->getType() == "wr")
+                        {
+                            while (true)
+                            {
+                                string tempAnswer;
+                                cout << "Type correct answer: ";
+                                getline(cin, tempAnswer);
+                                if (tempAnswer == "")
+                                {
+                                    cout << "[Answer cannot be empty]\n";
+                                    continue;
+                                }
+                                else
+                                {
+                                    itr->setWrAnswer(tempAnswer);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
