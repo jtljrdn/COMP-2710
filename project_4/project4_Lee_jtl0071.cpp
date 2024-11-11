@@ -384,8 +384,14 @@ void editQuestion(list<Question> &Questions)
     while (true)
     {
         int questionNumToEdit;
+        string response;
         cout << "Select a question to edit, or type quit() [1-" << Questions.size() << "]: ";
-        cin >> questionNumToEdit;
+        cin >> response;
+        if (response == "quit()")
+        {
+            break;
+        }
+        questionNumToEdit = stoi(response);
         if (questionNumToEdit <= 0 || questionNumToEdit > Questions.size())
         {
             cout << "[That question does not exist!]\n";
@@ -527,6 +533,7 @@ void editQuestion(list<Question> &Questions)
                                     break;
                                 }
                             }
+                            cout << "[Successfully changed answer!]\n";
                         }
                     }
                     else if (choice == "4")
@@ -547,6 +554,7 @@ void editQuestion(list<Question> &Questions)
                             break;
                         }
                         itr->setValue(newValue);
+                        cout << "[Successfully changed value!]\n";
                     }
                 }
             }
@@ -567,6 +575,35 @@ void editQuestionName(list<Question> &Questions, int questionNumToEdit)
         {
             itr->setQuestion(newQuestionName);
             cout << "[Successfully changed question!]\n";
+            break;
+        }
+    }
+}
+
+void deleteQuestion(list<Question> &Questions)
+{
+    while (true)
+    {
+        int questionNumToEdit;
+        string deleteResponse;
+        cout << "Select a question to delete, or type quit() [1-" << Questions.size() << "]: ";
+        cin >> deleteResponse;
+        if (deleteResponse == "quit()")
+        {
+            break;
+        }
+        questionNumToEdit = stoi(deleteResponse);
+        if (questionNumToEdit <= 0 || questionNumToEdit > Questions.size())
+        {
+            cout << "[That question does not exist!]\n";
+            continue;
+        }
+        else
+        {
+            auto itr = Questions.begin();
+            advance(itr, questionNumToEdit - 1);
+            Questions.erase(itr);
+            cout << "[Successfully deleted question!]\n";
             break;
         }
     }
@@ -717,6 +754,13 @@ int main()
         }
         else if (response == "3") // Delete Question
         {
+            if (Questions.empty())
+            {
+                cout << "[There must be atleast 1 question to edit.]\n";
+                continue;
+            }
+            deleteQuestion(Questions);
+            continue;
         }
         else if (response == "4")
         {
