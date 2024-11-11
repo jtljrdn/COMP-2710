@@ -13,6 +13,12 @@ execute: `./project4_Lee_jtl0071.out`
 using namespace std;
 #include <limits>
 
+struct UserAnswers
+{
+    string userAnswer;
+    string correctAnswer;
+};
+
 /* Struct for storing mcq answer data */
 struct answer // Struct for storing mcq answers. Ex key: `A`, answer: `C++ is an Object Oriented Programming Language`
 {
@@ -24,7 +30,10 @@ struct Result
 {
     int correct;
     double score;
+    list<UserAnswers> ua;
 };
+
+
 
 class Question // Class for creating `Question` objects
 {
@@ -609,108 +618,126 @@ void deleteQuestion(list<Question> &Questions)
     }
 }
 
-Result startTest(list<Question> Questions)
+Result startTest(list<Question> &Questions)
 {
     int count = 0;
     double score = 0;
     int correct = 0;
     Result result;
+    list<UserAnswers> answers;
 
-    for (auto question : Questions)
+    while (true)
     {
-        count++;
-        cout << "Question " << count << ": " << question.getQuestion() << endl;
-        if (question.getType() == "mcq")
+
+        string response;
+        cout << "Do you want to?\n";
+        cout << "   1. Go to next question.\n";
+        cout << "   2. Jump to question.\n";
+        cout << "   3. Submit.\n";
+        cout << "Select an action: ";
+        cin >> response;
+        cout << "\n";
+
+        if (response == "1") // Go to next question
         {
-            for (auto choice : question.getMcqAnswers())
+            if (count < Questions.size())
             {
+            count++;
+            auto itr = Questions.begin();
+            advance(itr, count - 1);
+            cout << "Question " << count << ": " << itr->getQuestion() << endl;
+            if (itr->getType() == "mcq")
+            {
+                for (auto choice : itr->getMcqAnswers())
+                {
                 cout << "   " << choice.key << ". " << choice.answer << endl;
-            }
-            while (true)
-            {
+                }
                 char userAnswer;
                 cout << "\nSelect correct answer: ";
                 cin >> userAnswer;
-                if (userAnswer < 65 || userAnswer >= 65 + question.getMcqAnswers().size() || !cin)
-                {
-                    cout << "[Answer not recognized, please try again!]\n";
-                    continue;
-                }
-                else if (userAnswer != question.getCorrect())
-                {
-                    cout << "[Your answer is incorrect. The correct answer is " << question.getCorrect() << ".]\n\n";
-                    break;
-                }
-                else
-                {
-                    cout << "[Your answer is correct!]\n\n";
-                    score += question.getValue();
-                    correct++;
-                    break;
-                }
+                cout << "\n";
+                UserAnswers ua;
+                ua.userAnswer = userAnswer;
+                ua.correctAnswer = itr->getCorrect();
+                answers.push_back(ua);
             }
-        }
-        else if (question.getType() == "tf")
-        {
-            while (true)
+            else if (itr->getType() == "tf")
             {
                 string tempAnswer;
                 bool answer;
                 cout << "Your answer [(t)rue/(f)alse]: ";
                 cin >> tempAnswer;
+                cout << "\n";
                 if (tempAnswer == "true" || tempAnswer == "t")
                 {
-                    answer = true;
+                answer = true;
                 }
                 else if (tempAnswer == "false" || tempAnswer == "f")
                 {
-                    answer = false;
+                answer = false;
                 }
-                else
-                {
-                    cout << "[Answer not recognized, please try again]\n";
-                    continue;
-                }
-                if (answer == question.getTfAnswer())
-                {
-                    cout << "[Your answer is correct!]\n\n";
-                    correct++;
-                    score += question.getValue();
-                    break;
-                }
-                else
-                {
-                    cout << "[Your answer is incorrect. The correct answer is " << (question.getCorrect() == true ? "true" : "false") << ".]\n\n";
-                    break;
-                }
+                UserAnswers ua;
+                ua.userAnswer = answer ? "true" : "false";
+                ua.correctAnswer = itr->getTfAnswer() ? "true" : "false";
+                answers.push_back(ua);
             }
-        }
-        else if (question.getType() == "wr")
-        {
-            while (true)
+            else if (itr->getType() == "wr")
             {
                 string answer;
                 cout << "Your answer: ";
                 cin.ignore();
                 getline(cin, answer);
-                if (answer == question.getWrAnswer())
-                {
-                    cout << "[Your answer is correct!]\n\n";
-                    correct++;
-                    score += question.getValue();
-                    break;
-                }
-                else
-                {
-                    cout << "[Your answer is incorrect. The correct answer is \033[31m" << question.getWrAnswer() << "\033[0m.]\n\n";
-                    break;
-                }
+                cout << "\n";
+                UserAnswers ua;
+                ua.userAnswer = answer;
+                ua.correctAnswer = itr->getWrAnswer();
+                answers.push_back(ua);
+            }
+            }
+            else
+            {
+            cout << "[No more questions available.]\n";
             }
         }
+        else if (response == "2") // Jump to question
+        {
+            int jumpTo;
+            cout << "Enter question number to jump to [1-" << Questions.size() << "]: ";
+            cin >> jumpTo;
+            if (jumpTo > 0 && jumpTo <= Questions.size())
+            {
+            count = jumpTo - 1;
+            }
+            else
+            {
+            cout << "[Invalid question number.]\n";
+            }
+        }
+        else if (response == "3") // Submit
+        {
+            for (auto &ua : answers)
+            {
+            if (ua.userAnswer == ua.correctAnswer)
+            {
+                correct++;
+                auto itr = Questions.begin();
+                advance(itr, &ua - &answers.front());
+                score += itr->getValue();
+            }
+            }
+            break;
+        }
+        else
+        {
+            cout << "[Invalid response. Please try again.]\n";
+        }
+
     }
+    
     cout << "Assessment Complete.\n\n";
     result.correct = correct;
     result.score = score;
+    result.ua = answers;
     return result;
 }
 
@@ -802,9 +829,16 @@ int main()
     }
 
     Result finalResult = startTest(Questions);
+    int count = 1;
 
     cout << "=== SESSION LOG ===\n";
     cout << "Correct answers: " << finalResult.correct << "/" << Questions.size() << endl;
+    for(auto response : finalResult.ua)
+    {
+        cout << "   Question " << count << ": " << response.correctAnswer << "\n";
+        cout << "   Your answer: " << response.userAnswer << "\n\n";
+        count++;
+    }
     cout << "Final score: " << finalResult.score << "/" << addPoints(Questions) << endl;
     cout << "\n*** Thank you for using the testing service. Goodbye! ***\n";
 }
