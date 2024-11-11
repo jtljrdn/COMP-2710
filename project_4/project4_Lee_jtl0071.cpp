@@ -7,9 +7,9 @@ Compile and Run Instructions:
 compile `g++ project4_Lee_jtl0071.cpp -o project4_Lee_jtl0071.out`
 execute: `./project4_Lee_jtl0071.out`
 */
-
 #include <iostream>
 #include <list> // Doubly-Linked List
+#include <cassert>
 using namespace std;
 #include <limits>
 
@@ -32,8 +32,6 @@ struct Result
     double score;
     list<UserAnswers> ua;
 };
-
-
 
 class Question // Class for creating `Question` objects
 {
@@ -385,7 +383,7 @@ Question createWr()
     return Question("wr", questionName, correctAnswer, value);
 }
 
-void editQuestionName(std::__1::list<Question> &Questions, int questionNumToEdit);
+void editQuestionName(list<Question> &Questions, int questionNumToEdit);
 
 void editQuestion(list<Question> &Questions)
 {
@@ -626,6 +624,12 @@ Result startTest(list<Question> &Questions)
     Result result;
     list<UserAnswers> answers;
 
+    if (Questions.empty())
+    {
+        cout << "[There must be atleast 1 question to be quizzed on.]\n";
+        return result;
+    }
+
     while (true)
     {
 
@@ -642,61 +646,61 @@ Result startTest(list<Question> &Questions)
         {
             if (count < Questions.size())
             {
-            count++;
-            auto itr = Questions.begin();
-            advance(itr, count - 1);
-            cout << "Question " << count << ": " << itr->getQuestion() << endl;
-            if (itr->getType() == "mcq")
-            {
-                for (auto choice : itr->getMcqAnswers())
+                count++;
+                auto itr = Questions.begin();
+                advance(itr, count - 1);
+                cout << "Question " << count << ": " << itr->getQuestion() << endl;
+                if (itr->getType() == "mcq")
                 {
-                cout << "   " << choice.key << ". " << choice.answer << endl;
+                    for (auto choice : itr->getMcqAnswers())
+                    {
+                        cout << "   " << choice.key << ". " << choice.answer << endl;
+                    }
+                    char userAnswer;
+                    cout << "\nSelect correct answer: ";
+                    cin >> userAnswer;
+                    cout << "\n";
+                    UserAnswers ua;
+                    ua.userAnswer = userAnswer;
+                    ua.correctAnswer = itr->getCorrect();
+                    answers.push_back(ua);
                 }
-                char userAnswer;
-                cout << "\nSelect correct answer: ";
-                cin >> userAnswer;
-                cout << "\n";
-                UserAnswers ua;
-                ua.userAnswer = userAnswer;
-                ua.correctAnswer = itr->getCorrect();
-                answers.push_back(ua);
-            }
-            else if (itr->getType() == "tf")
-            {
-                string tempAnswer;
-                bool answer;
-                cout << "Your answer [(t)rue/(f)alse]: ";
-                cin >> tempAnswer;
-                cout << "\n";
-                if (tempAnswer == "true" || tempAnswer == "t")
+                else if (itr->getType() == "tf")
                 {
-                answer = true;
+                    string tempAnswer;
+                    bool answer;
+                    cout << "Your answer [(t)rue/(f)alse]: ";
+                    cin >> tempAnswer;
+                    cout << "\n";
+                    if (tempAnswer == "true" || tempAnswer == "t")
+                    {
+                        answer = true;
+                    }
+                    else if (tempAnswer == "false" || tempAnswer == "f")
+                    {
+                        answer = false;
+                    }
+                    UserAnswers ua;
+                    ua.userAnswer = answer ? "true" : "false";
+                    ua.correctAnswer = itr->getTfAnswer() ? "true" : "false";
+                    answers.push_back(ua);
                 }
-                else if (tempAnswer == "false" || tempAnswer == "f")
+                else if (itr->getType() == "wr")
                 {
-                answer = false;
+                    string answer;
+                    cout << "Your answer: ";
+                    cin.ignore();
+                    getline(cin, answer);
+                    cout << "\n";
+                    UserAnswers ua;
+                    ua.userAnswer = answer;
+                    ua.correctAnswer = itr->getWrAnswer();
+                    answers.push_back(ua);
                 }
-                UserAnswers ua;
-                ua.userAnswer = answer ? "true" : "false";
-                ua.correctAnswer = itr->getTfAnswer() ? "true" : "false";
-                answers.push_back(ua);
-            }
-            else if (itr->getType() == "wr")
-            {
-                string answer;
-                cout << "Your answer: ";
-                cin.ignore();
-                getline(cin, answer);
-                cout << "\n";
-                UserAnswers ua;
-                ua.userAnswer = answer;
-                ua.correctAnswer = itr->getWrAnswer();
-                answers.push_back(ua);
-            }
             }
             else
             {
-            cout << "[No more questions available.]\n";
+                cout << "[No more questions available.]\n";
             }
         }
         else if (response == "2") // Jump to question
@@ -706,24 +710,24 @@ Result startTest(list<Question> &Questions)
             cin >> jumpTo;
             if (jumpTo > 0 && jumpTo <= Questions.size())
             {
-            count = jumpTo - 1;
+                count = jumpTo - 1;
             }
             else
             {
-            cout << "[Invalid question number.]\n";
+                cout << "[Invalid question number.]\n";
             }
         }
         else if (response == "3") // Submit
         {
             for (auto &ua : answers)
             {
-            if (ua.userAnswer == ua.correctAnswer)
-            {
-                correct++;
-                auto itr = Questions.begin();
-                advance(itr, &ua - &answers.front());
-                score += itr->getValue();
-            }
+                if (ua.userAnswer == ua.correctAnswer)
+                {
+                    correct++;
+                    auto itr = Questions.begin();
+                    advance(itr, &ua - &answers.front());
+                    score += itr->getValue();
+                }
             }
             break;
         }
@@ -731,15 +735,150 @@ Result startTest(list<Question> &Questions)
         {
             cout << "[Invalid response. Please try again.]\n";
         }
-
     }
-    
+
     cout << "Assessment Complete.\n\n";
     result.correct = correct;
     result.score = score;
     result.ua = answers;
     return result;
 }
+
+#define UNIT_TESTING
+#ifdef UNIT_TESTING
+
+/* TESTING */ 
+
+void test1()
+{
+    list<Question> questions;
+    cout << "Unit Test Case 1: Ask no question. The program should give a warning message.\n";
+    Result result = startTest(questions);
+    assert(result.ua.empty());
+    cout << "Case 1 Passed\n";
+}
+
+void test2()
+{
+    list<Question> questions;
+    string userAnswer = "85";
+    string correctAnswer = "38";
+    Question testQuestion = Question("wr", "How long was the shortest war on record?", correctAnswer, 100);
+    questions.push_back(testQuestion);
+
+    cout << "Unit Test Case 2.1: Ask 1 question in the linked list. The tester enters an incorrect answer.\n";
+    cout << "How long was the shortest war on record?\n";
+    cout << "Answer: 85\n";
+    assert(userAnswer != testQuestion.getWrAnswer());
+    cout << "Your answer is wrong. The correct answer is 38\n";
+    cout << "Total points: 0\n\n";
+    cout << "Case 2.1 Passed\n\n";
+
+    userAnswer = "38";
+    cout << "Unit Test Case 2.2: Ask 1 question in the linked list. The tester enters a correct answer.\n";
+    cout << "How long was the shortest war on record?\n";
+    cout << "Answer: 38\n";
+    assert(userAnswer == testQuestion.getWrAnswer());
+    cout << "Your answer is correct! You receive " << testQuestion.getValue() << " points!\n";
+    cout << "Total points: " << testQuestion.getValue() << "\n\n";
+    cout << "Case 2.2 Passed\n\n";
+}
+
+void test3()
+{
+    list<Question> questions;
+    string correctAnswer = "C++";
+    list<answer> mcqAnswers;
+    answer A = {'A', "Java"};
+    answer B = {'B', "Python"};
+    answer C = {'C', "C++"};
+    
+    mcqAnswers.push_back(A);
+    mcqAnswers.push_back(B);
+    mcqAnswers.push_back(C);
+    Question testQuestion = Question("mcq", "Which programming language is this?", mcqAnswers, 'C', 50);
+    questions.push_back(testQuestion);
+
+    cout << "Unit Test Case 3.1: Ask 1 MCQ question in the linked list. The tester enters an incorrect answer.\n";
+    cout << "Which programming language is this?\n";
+    cout << "Answer: B\n";
+    assert('B' != testQuestion.getCorrect());
+    cout << "Your answer is wrong. The correct answer is C\n";
+    cout << "Total points: 0\n\n";
+    cout << "Case 3.1 Passed\n\n";
+
+    cout << "Unit Test Case 3.2: Ask 1 MCQ question in the linked list. The tester enters a correct answer.\n";
+    cout << "Which programming language is this?\n";
+    cout << "Answer: C\n";
+    assert('C' == testQuestion.getCorrect());
+    cout << "Your answer is correct! You receive " << testQuestion.getValue() << " points!\n";
+    cout << "Total points: " << testQuestion.getValue() << "\n\n";
+    cout << "Case 3.2 Passed\n\n";
+}
+
+void test4()
+{
+    list<Question> questions;
+    bool correctAnswer = true;
+    Question testQuestion = Question("tf", "Is the sky blue?", correctAnswer, 20);
+    questions.push_back(testQuestion);
+
+    cout << "Unit Test Case 4.1: Ask 1 TF question in the linked list. The tester enters an incorrect answer.\n";
+    cout << "Is the sky blue?\n";
+    cout << "Answer: false\n";
+    assert(false != testQuestion.getTfAnswer());
+    cout << "Your answer is wrong. The correct answer is true\n";
+    cout << "Total points: 0\n\n";
+    cout << "Case 4.1 Passed\n\n";
+
+    cout << "Unit Test Case 4.2: Ask 1 TF question in the linked list. The tester enters a correct answer.\n";
+    cout << "Is the sky blue?\n";
+    cout << "Answer: true\n";
+    assert(true == testQuestion.getTfAnswer());
+    cout << "Your answer is correct! You receive " << testQuestion.getValue() << " points!\n";
+    cout << "Total points: " << testQuestion.getValue() << "\n\n";
+    cout << "Case 4.2 Passed\n\n";
+}
+
+void test5()
+{
+    list<Question> questions;
+    string correctAnswer = "42";
+    Question testQuestion = Question("wr", "What is the answer to life, the universe, and everything?", correctAnswer, 100);
+    questions.push_back(testQuestion);
+
+    cout << "Unit Test Case 5.1: Ask 1 WR question in the linked list. The tester enters an incorrect answer.\n";
+    cout << "What is the answer to life, the universe, and everything?\n";
+    cout << "Answer: 24\n";
+    assert("24" != testQuestion.getWrAnswer());
+    cout << "Your answer is wrong. The correct answer is 42\n";
+    cout << "Total points: 0\n\n";
+    cout << "Case 5.1 Passed\n\n";
+
+    cout << "Unit Test Case 5.2: Ask 1 WR question in the linked list. The tester enters a correct answer.\n";
+    cout << "What is the answer to life, the universe, and everything?\n";
+    cout << "Answer: 42\n";
+    assert("42" == testQuestion.getWrAnswer());
+    cout << "Your answer is correct! You receive " << testQuestion.getValue() << " points!\n";
+    cout << "Total points: " << testQuestion.getValue() << "\n\n";
+    cout << "Case 5.2 Passed\n\n";
+}
+
+int main()
+{
+    cout << "*** This is the debugging version ***\n\n";
+
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
+
+    cout << "*** End of the Debugging Version ***\n";
+}
+/*-------------------*/
+
+#else
 
 int main()
 {
@@ -816,6 +955,7 @@ int main()
         }
         else if (response == "y")
         {
+
             break;
         }
         else if (!cin)
@@ -831,9 +971,15 @@ int main()
     Result finalResult = startTest(Questions);
     int count = 1;
 
+    if (Questions.empty())
+    {
+        cout << "\n*** Thank you for using the testing service. Goodbye! ***\n";
+        return 0;
+    }
+
     cout << "=== SESSION LOG ===\n";
     cout << "Correct answers: " << finalResult.correct << "/" << Questions.size() << endl;
-    for(auto response : finalResult.ua)
+    for (auto response : finalResult.ua)
     {
         cout << "   Question " << count << ": " << response.correctAnswer << "\n";
         cout << "   Your answer: " << response.userAnswer << "\n\n";
@@ -842,3 +988,4 @@ int main()
     cout << "Final score: " << finalResult.score << "/" << addPoints(Questions) << endl;
     cout << "\n*** Thank you for using the testing service. Goodbye! ***\n";
 }
+#endif
