@@ -7,11 +7,16 @@ Compile and Run Instructions:
 compile `g++ project4_Lee_jtl0071.cpp -o project4_Lee_jtl0071.out`
 execute: `./project4_Lee_jtl0071.out`
 */
+
+// #define UNIT_TESTING
+
 #include <iostream>
 #include <list> // Doubly-Linked List
 #include <cassert>
 using namespace std;
 #include <limits>
+
+
 
 struct UserAnswers
 {
@@ -744,7 +749,7 @@ Result startTest(list<Question> &Questions)
     return result;
 }
 
-#define UNIT_TESTING
+
 #ifdef UNIT_TESTING
 
 /* TESTING */ 
