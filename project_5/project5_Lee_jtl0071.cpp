@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 {
     // change your the following id into your banner id
     // #8#BEGIN# DO NOT MODIFY THIS COMMENT LINE!
-    int banner_id = 904211138;
+    int banner_id = ;
     // #8#END# DO NOT MODIFY THIS COMMENT LINE!
     cout << "Banner id: " << banner_id << endl;
 
